@@ -1,5 +1,8 @@
 import { create } from "zustand";
 
+// Use env variable or fallback to localhost
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export const useProductStore = create((set) => ({
   products: [],
 
@@ -7,7 +10,7 @@ export const useProductStore = create((set) => ({
 
   fetchProducts: async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/products"); // full backend URL recommended
+      const res = await fetch(`${API_BASE_URL}/api/products`);
       if (!res.ok) throw new Error("Failed to fetch products");
       const data = await res.json();
       set({ products: data.data });
@@ -23,7 +26,7 @@ export const useProductStore = create((set) => ({
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/products", {
+      const res = await fetch(`${API_BASE_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newProduct),
@@ -45,7 +48,7 @@ export const useProductStore = create((set) => ({
 
   deleteProduct: async (pid) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${pid}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${pid}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -64,7 +67,7 @@ export const useProductStore = create((set) => ({
 
   updateProduct: async (pid, updatedProduct) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${pid}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${pid}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct),
